@@ -1,0 +1,160 @@
+@startuml Class
+class PhoneController {
+    - Repository<Phone> phoneRepository
+    + IActionResult Get(int phone)
+    + IActionResult Delete(int phone)
+}
+
+class ReviewController {
+    - Repository<Phone> phoneRepository
+    - Repository<Review> reviewRepository
+    + IActionResult Get(int id)
+    + IActionResult Post(CreateReviewForm review)
+    + IActionResult Put(CreateReviewForm review)
+    + IActionResult Delete(string id)
+}
+
+class AdminController {
+    - Repository<Admin> adminRepository
+    + IActionResult GetUser()
+    + IActionResult Login()
+}
+
+class CreateReviewForm {
+    + int Phone
+    + int Rating
+    + string AuthorName
+    + string Comment
+    + bool Scam
+    + bool Threats
+    + bool Message
+    + bool AutomaticCall
+    + bool CallCenter
+    + bool Advertisement
+    + bool Polls
+    + bool FinancialServices
+}
+
+
+
+together {
+    class Phone {
+        + int Id
+        + int Phone
+        + List<Review> Reviews
+    }
+    class Admin {
+        + int id
+        + string username
+        + string password_hash
+        + string email
+    }
+    note left of Admin::password_hash
+    Хэш хранится в формате SHA256
+    end note
+}
+
+together {
+    class Review {
+        + int Id
+        + Phone Phone
+        + int Rating
+        + string AuthorIp
+        + string AuthorName
+        + string Comment
+        + bool Scam
+        + bool Threats
+        + bool Message
+        + bool AutomaticCall
+        + bool CallCenter
+        + bool Advertisement
+        + bool Polls
+        + bool FinancialServices
+    }
+    note right of Review::Rating
+    Рейтинг может быть равен
+    только либо 0 (отрицательный),
+    либо 1 (положительный)
+    end note
+
+    abstract class Model {
+        + int Id
+    }
+}
+
+
+
+class Services {
+    + ApplicationContext db
+    + ApplicationDbOptions dbOptions
+    + ApplicationAuthOptions authOptions
+    + ApplicationSwaggerOptions swaggerOptions
+    + void addServices(WebApplicationBuilder builder)
+}
+
+
+together {
+    interface IRepository<TEntity : Model>{
+        + List<TEntity> GetAll()
+        + List<TEntity> GetAll(Expression includeProperties)
+        + TEntity? GetById()
+        + TEntity? GetById(Expression includeProperties)
+        + TEntity? Get()
+        + TEntity? Get(Expression includeProperties)
+        + void Add(TEntity entity)
+        + void Update(TEntity entity)
+        + void Delete(TEntity entity)
+        + void Save()
+    }
+
+    class ApplicationContext {
+        + DbSet<PhoneModel> phones
+        + DbSet<ReviewModel> reviews
+        + DbSet<AdminModel> admins
+        # void OnModelCreating()
+    }
+    note left of ApplicationContext::OnModelCreating()
+    Убедиться, что создан
+    аккаунт хотя бы одного
+    администратора
+    end note
+}
+
+class Repository<TEntity : Model>{
+    - ApplicationContext context
+    - DbSet<TEntity> dbSet;
+    + List<TEntity> GetAll()
+    + List<TEntity> GetAll(Expression includeProperties)
+    + TEntity? GetById()
+    + TEntity? GetById(Expression includeProperties)
+    + TEntity? Get()
+    + TEntity? Get(Expression includeProperties)
+    + void Add(TEntity entity)
+    + void Update(TEntity entity)
+    + void Delete(TEntity entity)
+    + void Save()
+}
+note right of Repository::"GetAll(Expression includeProperties)"
+Подгружает вложенные
+сущности
+end note
+
+Repository <.. IRepository
+
+Admin <.. Model
+Phone <.. Model
+Review <.. Model
+
+Repository -- ApplicationContext
+
+CreateReviewForm -- ReviewController
+
+PhoneController -- Repository
+ReviewController -- Repository
+AdminController -- Repository
+
+Phone  o-- Review
+
+Repository -- Phone
+Repository -- Review
+Repository -- Admin
