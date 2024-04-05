@@ -1,3 +1,7 @@
+using System.Net;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -43,5 +47,13 @@ public class BuilderUtils
                 Url = new Uri("https://github.com/hungrynoodlehead")
             }
         });
+    }
+
+    public void ApplicationJWTAuthenticationOptions(JwtBearerOptions options){
+        options.TokenValidationParameters = AuthUtils.AppTokenValidationParameters;
+    }
+
+    public void ApplicationAuthorizationOptions(AuthorizationOptions options){
+        options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
     }
 }

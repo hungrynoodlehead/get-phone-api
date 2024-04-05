@@ -8,6 +8,8 @@ BuilderUtils utils = new BuilderUtils(builder);
 builder.Services.AddSwaggerGen(utils.ApplicationSwaggerOptions);
 builder.Services.AddDbContext<ApplicationContext>(utils.ApplicationDatabaseOptions);
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddAuthentication("Bearer").AddJwtBearer(utils.ApplicationJWTAuthenticationOptions);
+builder.Services.AddAuthorization(utils.ApplicationAuthorizationOptions);
 builder.Services.AddControllers();
 
 var app = builder.Build();
