@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace GetPhone.Database;
 
 public class ApplicationContext : DbContext {
-    /*public DbSet<Phone> phones {get; set;} = null!;
-    public DbSet<Review> reviews {get; set;} = null!;*/
+    public DbSet<Phone> phones {get; set;} = null!;
+    public DbSet<Review> reviews {get; set;} = null!;
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options){
         Database.EnsureCreated();
     }

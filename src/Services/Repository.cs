@@ -13,30 +13,30 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Model {
         dbSet = context.Set<TEntity>();
     }
 
-    public List<TEntity> GetAll(){
-        return dbSet.ToList();
+    public IQueryable<TEntity> GetAll(){
+        return dbSet;
     }
-    public List<TEntity> GetAll(Expression<Func<TEntity, object>>[] includeProperties) {
+    public IQueryable<TEntity> GetAll(Expression<Func<TEntity, object>>[] includeProperties) {
         IQueryable<TEntity> query = dbSet;
         foreach(var includeProperty in includeProperties){
             query = query.Include(includeProperty);
         }
-        return query.ToList();
+        return query;
     }
 
     public TEntity? GetById(int id){
-        return dbSet.First(e => e.Id == id);
+        return dbSet.FirstOrDefault(e => e.Id == id);
     }
     public TEntity? GetById(int id, Expression<Func<TEntity, object>>[] includeProperties){
         IQueryable<TEntity> query = dbSet;
         foreach(var includeProperty in includeProperties){
             query = query.Include(includeProperty);
         }
-        return query.First(e => e.Id == id);
+        return query.FirstOrDefault(e => e.Id == id);
     }
 
     public TEntity? Get(Expression<Func<TEntity, bool>> predicate){
-        return dbSet.First(predicate);
+        return dbSet.FirstOrDefault(predicate);
     }
 
     public TEntity? Get(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>>[] includeProperties){
@@ -44,7 +44,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Model {
         foreach(var includeProperty in includeProperties){
             query = query.Include(includeProperty);
         }
-        return query.First(predicate);
+        return query.FirstOrDefault(predicate);
     }
 
     public void Add(TEntity entity) {

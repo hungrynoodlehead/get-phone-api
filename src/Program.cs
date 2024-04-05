@@ -13,8 +13,8 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 if(app.Environment.IsDevelopment()){
-    // Допиши пж
-    
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.MapControllers();

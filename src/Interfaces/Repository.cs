@@ -3,8 +3,8 @@ using System.Linq.Expressions;
 namespace GetPhone.Database.Interfaces;
 
 public interface IRepository<TEntity> {
-    List<TEntity> GetAll();
-    List<TEntity> GetAll(Expression<Func<TEntity, object>>[] includeProperties);
+    IQueryable<TEntity> GetAll();
+    IQueryable<TEntity> GetAll(Expression<Func<TEntity, object>>[] includeProperties);
     TEntity? GetById(int id);
     TEntity? GetById(int id, Expression<Func<TEntity, object>>[] includeProperties);
     TEntity? Get(Expression<Func<TEntity, bool>> predicate);

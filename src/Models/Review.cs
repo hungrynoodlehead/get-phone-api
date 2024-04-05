@@ -6,7 +6,6 @@ public class Review : Model {
     public new int Id {get; set;}
     public Phone Phone {get; set;} = new Phone();
     public int Rating {get; set;}
-    public string AuthorIP {get; set;} = "";
     public string AuthorName {get; set;} = "";
     public string Comment {get; set;} = "";
     public bool Scam {get; set;} = false;

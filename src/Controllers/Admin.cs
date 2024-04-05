@@ -9,7 +9,7 @@ public class AdminController : Controller {
     public AdminController(IRepository<Admin> adminRepository){
         this.adminRepository = adminRepository;
     }
-
+    [HttpGet]
     public IActionResult Get(){
         return Ok(adminRepository.GetById(1));
     }
