@@ -10,16 +10,6 @@ namespace GetPhone.Services;
 
 public static class AuthUtils
 {
-    private static IConfiguration configuration;
-    private static string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-
-    static AuthUtils()
-    {
-        configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-    }
 
     public const string ISSUER = "GetPhoneInfoServer";
     public const string AUDIENCE = "GetPhoneInfoClient";
@@ -27,9 +17,9 @@ public static class AuthUtils
     {
         string? keyString;
 
-        if (environment == "Development")
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
-            keyString = configuration["JWT:SecurityKey"];
+            keyString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus convallis pharetra suscipit. Donec tincidunt ac mauris hendrerit tristique.";
         }
         else
         {

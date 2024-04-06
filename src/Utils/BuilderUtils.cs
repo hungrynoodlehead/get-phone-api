@@ -30,7 +30,7 @@ public class BuilderUtils
             connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
         }
 
-        if(connectionString == null || connectionString == "") throw new InvalidOperationException("Database connection string is not configured");
+        if (connectionString == null || connectionString == "") throw new InvalidOperationException("Database connection string is not configured");
 
         options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 3, 0)));
     }
@@ -47,13 +47,37 @@ public class BuilderUtils
                 Url = new Uri("https://github.com/hungrynoodlehead")
             }
         });
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "JWT Токен",
+            Name = "Авторизация",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "bearer"
+        });
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement{
+            {
+                new OpenApiSecurityScheme{
+                    Reference = new OpenApiReference{
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[]{}
+            }
+        });
+
+        // Add bearer auth
     }
 
-    public void ApplicationJWTAuthenticationOptions(JwtBearerOptions options){
+    public void ApplicationJWTAuthenticationOptions(JwtBearerOptions options)
+    {
         options.TokenValidationParameters = AuthUtils.AppTokenValidationParameters;
     }
 
-    public void ApplicationAuthorizationOptions(AuthorizationOptions options){
+    public void ApplicationAuthorizationOptions(AuthorizationOptions options)
+    {
         options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
     }
 }

@@ -1,6 +1,7 @@
 using GetPhone.Database;
 using GetPhone.Database.Interfaces;
 using GetPhone.Database.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GetPhone.Controllers;
@@ -31,5 +32,19 @@ public class PhoneController : Controller {
             rating=Rating,
             reviews=reviewIds
         });
+    }
+
+    [HttpDelete]
+    [Authorize(Policy = "Admin")]
+    public IActionResult Delete(string number, IRepository<Review> reviewRepository){
+        Phone? phone = phoneRepository.Get(p => p.PhoneNumber == number, [p => p.Reviews]);
+        if(phone == null) return NotFound();
+
+        foreach(Review r in phone.Reviews){
+            reviewRepository.Delete(r);
+        }
+        phoneRepository.Delete(phone);
+        phoneRepository.Save();
+        return Ok();
     }
 }
