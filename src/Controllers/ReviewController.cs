@@ -1,6 +1,7 @@
 using GetPhone.Database;
 using GetPhone.Database.Interfaces;
 using GetPhone.Database.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -84,8 +85,12 @@ public class ReviewController : Controller {
         });
     }
 
-    /*public IActionResult Put(int number, ReviewForm form){
+    [HttpPut]
+    [Route("phone/{number:minlength(11)}/{id:int}")]
+    [Authorize(Policy = "Admin")]
+    public IActionResult Put(string number, ReviewForm form){
         Review? review = reviewRepository.Get(r => r.Phone.PhoneNumber == number);
+
         if(review == null) return NotFound();
         if(form.rating < 0 && form.rating > 1) return BadRequest();
         if(form.comment == "") return BadRequest();
@@ -106,11 +111,16 @@ public class ReviewController : Controller {
         return Ok();
     }
 
-    public IActionResult Delete(int number){
-        Review review = reviewRepository.Get(r => r.Phone.PhoneNumber == number);
+    [HttpDelete]
+    [Route("phone/{number:minlength(11)}/{id:int}")]
+    [Authorize(Policy = "Admin")]
+    public IActionResult Delete(string number){
+        Review? review = reviewRepository.Get(r => r.Phone.PhoneNumber == number);
         if(review == null) return NotFound();
+
         reviewRepository.Delete(review);
         reviewRepository.Save();
+
         return Ok();
-    }*/
+    }
 }
