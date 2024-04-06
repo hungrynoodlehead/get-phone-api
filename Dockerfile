@@ -1,15 +1,19 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /repo
 
-COPY *.sln .
-COPY ./src/*.csproj ./source
+COPY Project.sln ./
+COPY ./src ./src
 RUN dotnet restore
 
-COPY ./src ./source
-WORKDIR /repo/source
+WORKDIR /repo/src
 RUN dotnet publish -c release -o /artifacts --no-restore
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /artifacts ./
-ENTRYPOINT [ "dotnet", "aspnetapp.dll" ]
+COPY --from=build /artifacts .
+
+
+EXPOSE 8080
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+ENTRYPOINT [ "dotnet", "GetPhoneAPI.dll" ]

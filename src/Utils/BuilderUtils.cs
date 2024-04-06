@@ -21,7 +21,7 @@ public class BuilderUtils
     {
         string? connectionString;
 
-        if (!builder.Environment.IsProduction())
+        if (!builder.Environment.IsProduction() && Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") == null)
         {
             connectionString = builder.Configuration.GetConnectionString("Default");
         }

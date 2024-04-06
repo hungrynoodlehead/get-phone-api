@@ -1,0 +1,18 @@
+services:
+  api:
+    build: ../
+    environment:
+      - DB_CONNECTION_STRING=server=mysql;port=3306;user=app;password=strategic-falsify-theft;database=app;
+    ports:
+      - 5000:8080
+
+  mysql:
+    image: mysql:8.3.0
+    restart: always
+    environment:
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=strategic-falsify-theft
+      - MYSQL_ROOT_PASSWORD=admin 
+    ports:
+      - 3306:3306

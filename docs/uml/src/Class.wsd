@@ -11,7 +11,7 @@ class ReviewController {
     + IActionResult Get(int id)
     + IActionResult Post(CreateReviewForm review)
     + IActionResult Put(CreateReviewForm review)
-    + IActionResult Delete(string id)
+    + IActionResult Delete(string id, IRepository<Review> reviewRepository)
 }
 
 class AdminController {
@@ -21,21 +21,18 @@ class AdminController {
 }
 
 class CreateReviewForm {
-    + int Phone
-    + int Rating
-    + string AuthorName
-    + string Comment
-    + bool Scam
-    + bool Threats
-    + bool Message
-    + bool AutomaticCall
-    + bool CallCenter
-    + bool Advertisement
-    + bool Polls
-    + bool FinancialServices
+    + int rating
+    + string author_name
+    + string comment
+    + bool scam
+    + bool threats
+    + bool message
+    + bool automatic_call
+    + bool call_center
+    + bool advertisement
+    + bool polls
+    + bool financial_services
 }
-
-
 
 together {
     class Phone {
@@ -84,14 +81,22 @@ together {
 
 
 
-class Services {
-    + ApplicationContext db
-    + ApplicationDbOptions dbOptions
-    + ApplicationAuthOptions authOptions
-    + ApplicationSwaggerOptions swaggerOptions
-    + void addServices(WebApplicationBuilder builder)
+class BuilderUtils {
+    - WebApplicationBuilder builder
+    + BuilderUtils(WebApplicationBuilder builder)
+    + void ApplicationDatabaseOptions(DbContextOptionsBuilder options)
+    + void ApplicationSwaggerOptions(SwaggerGenOptions options)
+    + void ApplicationJWTAuthenticationOptions(JwtBearerOptions options)
+    + void ApplicationAuthorizationOptions(AuthorizationOptions options)
 }
 
+static class AuthUtils {
+    + const string ISSUER
+    + const string AUDIENCE
+    + static SymmetricSecurityKey SecurityKey()
+    + static TokenValidationParameters AppTokenValidationParameters
+    + static string Hash(string input)
+}
 
 together {
     interface IRepository<TEntity : Model>{
