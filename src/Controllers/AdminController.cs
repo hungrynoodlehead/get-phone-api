@@ -1,4 +1,3 @@
-using GetPhone.Database;
 using GetPhone.Database.Models;
 using GetPhone.Database.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using GetPhone.Services;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 [ApiController]
 [Route("[controller]/[action]")]

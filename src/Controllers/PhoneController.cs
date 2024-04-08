@@ -1,4 +1,3 @@
-using GetPhone.Database;
 using GetPhone.Database.Interfaces;
 using GetPhone.Database.Models;
 using Microsoft.AspNetCore.Authorization;
